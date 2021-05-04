@@ -18,7 +18,7 @@ body {
 
 .main {
   height: 80%;
-  width: 30%;
+  width: 25%;
   border-radius: 10px;
 }
 
@@ -94,6 +94,11 @@ body {
   border: none;
 }
 
+.active {
+  background: #2d869f;
+  color: white;
+}
+
 .button h2 {
   font-weight: bold;
   color: black;
@@ -103,11 +108,16 @@ body {
 }
 
 .button i {
-  opacity: 0.7;
+  opacity: 1;
+}
+
+#divide {
+  color: #ffff;
+  opacity: 1;
 }
 
 #times {
-  opacity: 0.5;
+  opacity: 1;
 }
 .controls {
   display: flex;

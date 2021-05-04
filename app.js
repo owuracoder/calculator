@@ -43,113 +43,109 @@ function reSet(opera){
     operand = opera
 }
 
+function clearActive (){
+    for(let i = 0; i < buttons.length; i++){
+        if(buttons[i].classList.contains('active')){
+            let activeBut = buttons[i]
+            activeBut.classList.remove('active')
+        }  
+    }
+}
+
+function handler(e){
+     
+    showNum(e) 
+    if(e.target.id == 'dot'){
+        dotCounter--
+        if(dotCounter == 1){
+            dot.removeEventListener('click',handler)
+        }
+    } 
+                
+    if(operaTag.includes(e.target.classList[1])){
+         dot.addEventListener('click',handler)
+         dotCounter = 2
+
+         clearActive()
+        
+         let selButton = e.target.parentElement
+         selButton.classList.add('active')
+
+
+        if(numbers == ''){
+            numbers = 0
+        }else  if(num1 == null){
+            num1 = convInt(numbers)
+            operaContainer = e.target.classList[1]
+            reSet(operaContainer)
+        }  else if(num1 != null){
+            num2 = convInt(numbers)      
+            let result = parseFloat(operate(operand,num1,num2).toFixed(2))
+            num1 = result
+            operaContainer = e.target.classList[1]
+            reSet(operaContainer)  
+        }
+    } else if(e.target.classList[1] == 'clr' || e.target.classList[1] == 'fa-backspace')  {
+        
+        let splitted = numbers.split('')
+        
+        splitted.pop()
+           
+        let newText = splitted.join('')
+
+        if(splitted.length == 0){
+            dotCounter = 2
+            dot.addEventListener('click',handler)
+        }
+        numbers = newText
+        screen.classList.add('screenh2')
+        screen.textContent = newText
+    } else if(e.target.classList[1] == 'fa-power-off'){
+        clearActive()
+        screen.textContent = ''
+        num1 = null
+        num2 = null
+        numbers = ''
+        operand = ''
+        operaContainer = ''
+    }else if(e.target.classList[1] == 'fa-equals'){
+        clearActive()
+        
+        if(operand == ''){
+            screen.textContent = numbers
+        } else if(numbers == ''){
+            screen.textContent = ''
+        }
+         else{
+            num2 = convInt(numbers)
+            let result = parseFloat(operate(operand,num1,num2).toFixed(2))
+            screen.textContent = result
+            numbers = result
+            num1 = null
+            num2 = null
+        }
+
+    }
+}
+
+function calculator(){
+    for(let i = 0; i < buttons.length; i++){
+        buttons[i].addEventListener('click',handler)
+       
+    }
+}
+
+
 let screen = document.querySelector('.screen')
-
-
-let num1 = 0;
-
-let num2 = 0;
-
+let num1 = null;
+let num2 = null;
+let dotCounter = 2;
 let numbers = ''
 let operand = ''
 let operaContainer = ''
 let operaTag = ['fa-divide','fa-times','fa-minus','fa-plus']
-
 let buttons = document.querySelectorAll('.button')
+let dot = document.querySelector('#dot')
 
-for(let i = 0; i < buttons.length; i++){
-    buttons[i].addEventListener('click',function(e){
-         
-        showNum(e)
-        if(operaTag.includes(e.target.classList[1])){
-            num1 = convInt(numbers)
-            operaContainer = e.target.classList[1]
-            reSet(operaContainer)
-        } else if(e.target.classList[1] == 'clr' || e.target.classList[1] == 'fa-backspace')  {
-            
-            let strArr = parseFloat(screen.textContent)
+calculator()
 
-            let stringArr = String(strArr)
-            let splitted = stringArr.split('')
-                splitted.pop()
-               
-            let newText = splitted.join('')
-            if(newText == 'Na'){
-                newText = ''
-            }
-            numbers = newText
-            screen.classList.add('screenh2')
-            screen.textContent = newText
-        } else if(e.target.classList[1] == 'fa-power-off'){
-            screen.textContent = ''
-            num1 = 0
-            num2 = 0
-            numbers = ''
-            operand = ''
-            operaContainer = ''
-        }
-         else if(e.target.classList[1] == 'fa-equals'){
-                    num2 = convInt(numbers)
-                    let result = parseFloat(operate(operand,num1,num2).toFixed(2))
-                    screen.textContent = result
-                    numbers = ''
-                 
-
-        }
-    })
-}
-
-// let clrBtn = document.querySelector('.clr')
-
-
-// clrBtn.addEventListener('click',function(){
-    
-//     // let strArr = parseInt(screen.textContent)
-//     // let stringArr = String(strArr)
-//     // let splitted = stringArr.split('')
-//     // splitted.pop()
-//     // let newText = splitted.join('')
-    
-// })
-
-// document.addEventListener('click',function(e){
-    
-//     numbers += e.target.innerText
-//     screen.classList.add('screenh2')
-//     screen.textContent = numbers
-    
-    // if(e.target.classList[1] == 'fa-divide'){
-    //     console.log('divide fired')
-    //     num1 = convInt(numbers)
-    //     numbers = ''
-    //     operand = 'fa-divide'
-        // if(e.target.classList[1] == 'fa-equals'){
-        //     num2 = convInt(numbers)
-        //     let result = parseFloat(operate('fa-divide',num1,num2).toFixed(2))
-        //     screen.textContent = result
-        // }
-    // }else if(e.target.classList[1] == 'fa-times'){
-//         num1 = convInt(numbers)
-//         numbers = ''
-//         operand = 'fa-times'
-//     }else if(e.target.classList[1] == 'fa-minus'){
-//         num1 = convInt(numbers)
-//         numbers = ''
-//         operand = 'fa-minus'
-//     } else if(e.target.classList[1] == 'fa-plus'){
-//         num1 = convInt(numbers)
-//         numbers = ''
-//         operand = 'fa-plus'
-//     }
-    //  else if(e.target.classList[1] == 'fa-equals'){
-    //     num2 = convInt(numbers)
-    //     numbers = ''
-    //     console.log('num2',num2)
-    //     let result = parseFloat(operate(operand,num1,num2).toFixed(2))
-    //     console.log(result)
-    //     screen.textContent = result
-    // } else if(e.target.classList[1] == 'clr'){
-//         console.log('i got you')
-//         screen.textContent = 'I got you'
-//     }
-// })
